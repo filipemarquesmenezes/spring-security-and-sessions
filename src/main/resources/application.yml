@@ -1,0 +1,13 @@
+spring:
+  security:
+    user:
+      password: user
+
+server:
+  tomcat:
+    max-threads: 1
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web.filter: DEBUG
