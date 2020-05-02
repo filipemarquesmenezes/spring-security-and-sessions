@@ -2,6 +2,7 @@ package com.security.demosecurity.sessions;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
@@ -18,6 +19,16 @@ public class HttpSessionManagement {
 
     public List<HttpSession> getActiveSessions() {
         return new ArrayList<>(sessions.values());
+    }
+
+    public boolean invalidate(String sessionId) {
+        HttpSession httpSession = sessions.get(sessionId);
+        if(httpSession != null) {
+            SecurityContextHolder.clearContext();
+            httpSession.invalidate();
+            return true;
+        }
+        return false;
     }
 
     @Bean
