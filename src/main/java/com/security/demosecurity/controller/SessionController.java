@@ -2,6 +2,7 @@ package com.security.demosecurity.controller;
 
 import com.security.demosecurity.sessions.HttpSessionManagement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ public class SessionController {
     @Autowired
     private HttpSessionManagement sessionManagement;
 
-    @RequestMapping
+    @GetMapping
     public Map<String, List<String>> sessions() {
             return Collections.singletonMap("sessions",
                 sessionManagement.getActiveSessions()
@@ -30,7 +31,7 @@ public class SessionController {
     }
 
     // TODO Currently not working properly
-    @RequestMapping("/invalidate")
+    @GetMapping("/invalidate")
     public Map<String, String> invalidate(@RequestParam("session-id") String sessionId) {
         if(sessionManagement.invalidate(sessionId)) {
             return Collections.singletonMap("status", "invalidated");

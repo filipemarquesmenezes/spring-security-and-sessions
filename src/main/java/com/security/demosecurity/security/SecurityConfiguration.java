@@ -1,5 +1,6 @@
 package com.security.demosecurity.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,28 +9,33 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@EnableWebSecurity
-public class SpringBootSecurityConfiguration extends WebSecurityConfigurerAdapter {
+import javax.sql.DataSource;
 
-    private static final String[] ADMIN_ROLE = {"admin", "user"};
-    private static final String[] USER_ROLE = {"user"};
+@EnableWebSecurity
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private static final String ADMIN = "ADMIN";
+    private static final String USER = "USER";
+
+    @Autowired
+    private DataSource dataSource;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("admin").password(passwordEncoder().encode("admin")).roles(ADMIN_ROLE)
-                .and()
-                .withUser("user").password(passwordEncoder().encode("user")).roles(USER_ROLE);
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        super.configure(http);
         http.formLogin();
-//        http.csrf().disable();
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
         http.authorizeRequests()
-                .antMatchers("/admin/**").hasAnyRole(ADMIN_ROLE)
-                .antMatchers("/user/**").hasAnyRole(USER_ROLE)
+                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/admin/**").hasAnyRole(ADMIN)
+                .antMatchers("/user/**").hasAnyRole(USER)
                 .anyRequest().authenticated();
 
     }

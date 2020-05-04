@@ -1,3 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: sa
+    platform: h2
+  h2:
+    console:
+      enabled: true
+  jpa:
+    show-sql: true
+
 server:
   tomcat:
     max-threads: 1
