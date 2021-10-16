@@ -11,9 +11,11 @@ spring:
   jpa:
     show-sql: true
 
-server:
-  tomcat:
-    max-threads: 1
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 
 logging:
   level:
