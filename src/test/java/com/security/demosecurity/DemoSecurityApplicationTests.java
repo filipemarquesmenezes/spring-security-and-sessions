@@ -10,8 +10,12 @@ import static org.springframework.test.util.AssertionErrors.assertNotNull;
 @SpringBootTest
 class DemoSecurityApplicationTests {
 
+	private final HttpSessionManagement sessionManagement;
+
 	@Autowired
-	HttpSessionManagement sessionManagement;
+	DemoSecurityApplicationTests(HttpSessionManagement sessionManagement) {
+		this.sessionManagement = sessionManagement;
+	}
 
 	@Test
 	void contextLoads() {
